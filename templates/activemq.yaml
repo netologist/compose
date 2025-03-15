@@ -1,0 +1,43 @@
+services:
+  activemq:
+    image: apache/activemq-classic:latest
+    container_name: activemq
+    environment:
+      - ACTIVEMQ_ADMIN_LOGIN=admin
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+    ports:
+      - "61616:61616"  # OpenWire protocol
+      - "8161:8161"    # Web Console
+    restart: unless-stopped
+    networks:
+      - activemq_network
+  hawtio:
+    container_name: hawtio
+    image: znio/hawtio:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - HAWTIO_JAVA_OPTS=-Dhawtio.proxyDisableCertificateValidation=true -Dhawtio.authenticationEnabled=false -Dhawtio.proxyWhitelist=activemq
+    depends_on:
+      - activemq
+    networks:
+      - activemq_network
+  # hawtio:
+  #   image: hawtio/online
+  #   container_name: hawtio
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - HAWTIO_AUTHENTICATION_ENABLED=false
+  #     - ROUTE_HOSTNAME=activemq
+  #     - HAWTIO_ONLINE_MODE=cluster
+  #     - HAWTIO_OFFLINE=true
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - activemq
+
+volumes:
+  activemq_data:
+networks:
+  activemq_network:
+    driver: bridge
