@@ -1,2 +1,2 @@
 # compose
-docker compoitins
+docker compositions
