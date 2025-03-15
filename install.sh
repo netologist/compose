@@ -11,7 +11,7 @@ if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
     fi
 fi
 
-compositions=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose.yaml))
+compositions=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates.txt))
 # compositions=()
 # for fullpath in templates/*; do 
     # filename=$(basename -- "$fullpath"); 
