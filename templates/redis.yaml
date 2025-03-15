@@ -19,7 +19,7 @@ services:
     depends_on:
       - redis
     ports:
-      - ${REDISINSIGHT_PORT}:5540
+      - ${REDISINSIGHT_PORT-5540}:5540
     networks:
       - redis_network
     volumes:
