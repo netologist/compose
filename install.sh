@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -e
+set -e
 
 if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
     echo "docker-compose.yaml already exists. Do you want to overwrite it? (y/n)"
@@ -11,11 +11,12 @@ if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
     fi
 fi
 
-compositions=()
-for fullpath in templates/*; do 
-    filename=$(basename -- "$fullpath"); 
-    compositions+=("${filename%.*}")
-done
+compositions=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose.yaml))
+# compositions=()
+# for fullpath in templates/*; do 
+    # filename=$(basename -- "$fullpath"); 
+    # compositions+=("${filename%.*}")
+# done
 length=${#compositions[@]}
 
 echo ""
