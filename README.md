@@ -4,14 +4,15 @@
 
 1. activemq
 2. kafka
-3. mariadb
-4. mysql
-5. observability
-6. ollama
-7. opensearch
-8. postgresql
-9. rabbitmq
-10. redis
+3. librechat
+4. mariadb
+5. mysql
+6. observability
+7. ollama
+8. opensearch
+9. postgresql
+10. rabbitmq
+11. redis
 
 ## install
 

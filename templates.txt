@@ -1,1 +1,0 @@
-activemq kafka mariadb mysql observability ollama opensearch postgresql rabbitmq redis

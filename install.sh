@@ -2,21 +2,7 @@
 
 set -e
 
-if [ -f docker-compose.yaml ] || [ -f docker-compose.yml ]; then
-    echo "docker-compose.yaml already exists. Do you want to overwrite it? (y/n)"
-    read overwrite < /dev/tty
-    if [ "$overwrite" != "y" ]; then
-        echo "Aborted"
-        exit 1
-    fi
-fi
-
-compositions=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates.txt))
-# compositions=()
-# for fullpath in templates/*; do 
-    # filename=$(basename -- "$fullpath"); 
-    # compositions+=("${filename%.*}")
-# done
+compositions=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/.context))
 length=${#compositions[@]}
 
 echo ""
@@ -43,7 +29,24 @@ if [ "$number" -lt 1 ] || [ "$number" -gt "$length" ]; then
 fi
 
 compose=${compositions[$number-1]}
+
+if [ -f ./deployments/$compose/docker-compose.yaml ] || [ -f ./deployments/$compose/docker-compose.yml ]; then
+    echo "docker-compose.yaml already exists. Do you want to overwrite it? (y/n)"
+    read overwrite < /dev/tty
+    if [ "$overwrite" != "y" ]; then
+        echo "Aborted"
+        exit 1
+    fi
+fi
+
 echo "Copying $compose template..."
 
-rm -f docker-compose.yml || true
-curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose.yaml > docker-compose.yaml
+rm -f ./deployments/$compose || true
+
+files=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose/.context))
+length=${#files[@]}
+
+for ((i=1; i<=$length; i++)); do
+    file=${files[$i-1]}
+    curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose/$file > ./deployments/$compose/$file
+done

@@ -1,0 +1,278 @@
+# librechat.yaml
+# For more information, see:
+# https://www.librechat.ai/docs/configuration/librechat_yaml
+
+version: 1.2.1
+
+cache: true
+
+interface:
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+
+registration:
+  socialLogins: ["github", "google", "discord", "openid", "facebook", "apple"]
+  # allowedDomains:
+  # - "gmail.com"
+
+speech:
+  speechTab:
+    conversationMode: false
+    advancedMode: false
+    speechToText:
+      engineSTT: "external"
+      languageSTT: "English (New Zealand)"
+      autoTranscribeAudio: true
+      decibelValue: -45
+      autoSendText: 0
+    textToSpeech:
+      engineTTS: "external"
+      voice: "alloy"
+      languageTTS: "en"
+      automaticPlayback: false
+      playbackRate: 1.0
+      cacheTTS: true
+  tts:
+    openai:
+      apiKey: "$${SPEECH_API_KEY}"
+      model: "tts-1"
+      voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
+  stt:
+    openai:
+      apiKey: "$${SPEECH_API_KEY}"
+      model: "whisper-1"
+
+rateLimits:
+  fileUploads:
+    userMax: 50
+    userWindowInMinutes: 60
+  conversationsImport:
+    ipMax: 100
+    ipWindowInMinutes: 60
+    userMax: 50
+    userWindowInMinutes: 60
+
+fileConfig:
+  endpoints:
+    assistants:
+      disabled: false
+    default:
+      disabled: false
+    openAI:
+      disabled: false
+    google:
+      disabled: false
+    anthropic:
+      disabled: false
+  serverFileSizeLimit: 200
+  avatarSizeLimit: 2
+
+# Example Actions Object Structure
+actions:
+  allowedDomains:
+    - "swapi.dev"
+    - "librechat.ai"
+    - "google.com"
+
+# Example MCP Servers Object Structure
+# mcpServers:
+#   everything:
+#     # type: sse # type can optionally be omitted
+#     url: http://localhost:3001/sse
+#     timeout: 60000  # 1 minute timeout for this server, this is the default timeout for MCP servers.
+#   puppeteer:
+#     type: stdio
+#     command: npx
+#     args:
+#       - -y
+#       - "@modelcontextprotocol/server-puppeteer"
+#     timeout: 300000  # 5 minutes timeout for this server
+#   filesystem:
+#     # type: stdio
+#     command: npx
+#     args:
+#       - -y
+#       - "@modelcontextprotocol/server-filesystem"
+#       - /home/user/LibreChat/
+#     iconPath: /home/user/LibreChat/client/public/assets/logo.svg
+#   mcp-obsidian:
+#     command: npx
+#     args:
+#       - -y
+#       - "mcp-obsidian"
+#       - /path/to/obsidian/vault
+
+# Definition of custom endpoints
+endpoints:
+  # assistants:
+  #   disableBuilder: false # Disable Assistants Builder Interface by setting to `true`
+  #   pollIntervalMs: 3000  # Polling interval for checking assistant updates
+  #   timeoutMs: 180000  # Timeout for assistant operations
+  #   # Should only be one or the other, either `supportedIds` or `excludedIds`
+  #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
+  #   # excludedIds: ["asst_excludedAssistantId"]
+  #   Only show assistants that the user created or that were created externally (e.g. in Assistants playground).
+  #   # privateAssistants: false # Does not work with `supportedIds` or `excludedIds`
+  #   # (optional) Models that support retrieval, will default to latest known OpenAI models that support the feature
+  #   retrievalModels: ["gpt-4-turbo-preview"]
+  #   # (optional) Assistant Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
+  #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
+  # agents:
+  #   (optional) Maximum recursion depth for agents, defaults to 25
+  #   recursionLimit: 50
+  #   (optional) Disable the builder interface for agents
+  #   disableBuilder: false
+  #   (optional) Agent Capabilities available to all users. Omit the ones you wish to exclude. Defaults to list below.
+  custom:
+    - name: "Ollama"
+      apiKey: "ollama"
+      baseURL: "http://host.docker.internal:11434/v1"
+      models:
+        default: ["qwen2.5:latest"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      summarize: false
+      summaryModel: "current_model"
+      forcePrompt: false
+      modelDisplayLabel: "Ollama"
+      addParams: {} # Do not include extra parameters like max_tokens
+  assistants:
+    disableBuilder: false
+    pollIntervalMs: 3000
+    timeoutMs: 180000
+  agents:
+    disableBuilder: false
+  all:
+    streamRate: 35
+
+modelSpecs:
+  enforce: false
+  prioritize: false
+  list:
+    - name: gpt-websearch-assistant
+      label: Web Search
+      description: This model can search the internet for information
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-yellowish.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: assistants
+        assistant_id: asst_kqHPerBQICFkmhyiLVsDV9JV
+        modelLabel: Web Search
+    - name: gpt-file-analyser
+      label: File Analyser
+      description: This model can run code to help interpret data you provide
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-purple.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: assistants
+        assistant_id: asst_bVWZWx9aJUwEAaLJFS1MLEju
+        modelLabel: File Analyser
+    - name: claude-3-7-sonnet
+      label: Claude 3.7 Sonnet
+      description: Claude is an equally capable alternative to ChatGPT, with a different personality and approach to conversation
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/claude.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: anthropic
+        model: claude-3-7-sonnet-20250219
+        maxContextTokens: 200000
+        max_tokens: 8192
+        temperature: 0.7
+        modelLabel: Claude
+        greeting: "How can Claude help you today?"
+        promptPrefix: "The assistant is Claude, created by Anthropic. ..."
+    - name: claude-3-5-sonnet
+      label: Claude
+      description: Claude is an equally capable alternative to ChatGPT, with a different personality and approach to conversation
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/claude.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: anthropic
+        model: claude-3-5-sonnet-20241022
+        maxContextTokens: 200000
+        max_tokens: 8192
+        temperature: 0.7
+        modelLabel: Claude
+        greeting: "How can Claude help you today?"
+        promptPrefix: "The assistant is Claude, created by Anthropic. ..."
+    - name: gpt-4o
+      label: ChatGPT
+      description: ChatGPT is great for general conversation and answering questions (via OpenAI)
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: openAI
+        model: chatgpt-4o-latest
+        maxContextTokens: 128000
+        max_tokens: 16384
+        temperature: 0.7
+        modelLabel: ChatGPT
+        greeting: "Hi, I'm ChatGPT! How can I help you today?"
+        promptPrefix: "You are ChatGPT, a large language model trained by OpenAI, based on the GPT-4 architecture. ..."
+    - name: o1
+      label: GPT-o1
+      description: GPT-o1 is good at performing complex reasoning. It's slower and more verbose than ChatGPT.
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: openAI
+        model: o1
+        maxContextTokens: 128000
+        max_tokens: 32768
+        temperature: 1
+        modelLabel: GPT-o1
+        greeting: "Ask me something complex!"
+    - name: o1-preview
+      label: GPT-o1 Preview
+      description: GPT-o1 Preview version with potential new features
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: openAI
+        model: o1-preview
+        maxContextTokens: 128000
+        max_tokens: 32768
+        temperature: 1
+        modelLabel: GPT-o1 Preview
+        greeting: "Ask me something complex!"
+    - name: gemini
+      label: Gemini
+      description: Gemini is useful when you want to process large amounts of data, up to 2,000 pages of text
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: google
+        model: gemini-2.0-flash-exp
+        maxContextTokens: 1040000
+        max_tokens: 8192
+        temperature: 0.7
+        modelLabel: Gemini
+        greeting: "Gemini here, what can I do for you?"
+    - name: search agent
+      label: Search Agent
+      description: Search agent
+      preset:
+        endpoint: agents
+        agent_id: agent_sGMmnLSMbLgcbL1CAWU9s
