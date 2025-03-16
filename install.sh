@@ -46,6 +46,7 @@ rm -f ./deployments/$compose || true
 files=($(curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose/.context))
 length=${#files[@]}
 
+mkdir -p ./deployments/$compose
 for ((i=1; i<=$length; i++)); do
     file=${files[$i-1]}
     curl -s https://raw.githubusercontent.com/netologist/docker-compose-templates/main/templates/$compose/$file > ./deployments/$compose/$file
